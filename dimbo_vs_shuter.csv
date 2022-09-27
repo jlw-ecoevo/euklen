@@ -1,0 +1,8 @@
+Accession,Species.Name,Doubling.Time.Dimbo,OGT,Genome.Length.NCBI,Doubling.Time.Shuter,Genome.Size.Shuter,Micronucleus.Size.Shuter
+GCA_000149405.2,Thalassiosira pseudonana,4.89,24,32842863,3.86,0.116,
+GCA_900893395.1,Euglena gracilis,13.5,27.5,1454440282,12.4,2.42,
+GCA_008369845.1,Trichomonas gallinae,2.75,37,55484453,,0.7,
+GCA_002891335.1,Trichomonas vaginalis,4.42,37,166123770,,1,
+GCA_000715435.1,Paramecium caudatum,10.2,23,30862275,10.2,310,17.5
+GCA_006369765.1,Halteria grandinella,11.55,16.5,64869953,7.8,28.5,0.91
+GCA_016759035.1;GCA_016759055.1;GCA_016802755.1;GCA_016802775.1;GCA_016807985.1;GCA_016808005.1;GCA_016808045.1;GCA_016808065.1,Paramecium bursaria,16.6,23,27153187,16.6,77.9,7.5
