@@ -6,7 +6,7 @@ library(ggpubr)
 
 ## LOADING TREE ----------------------------------------------------------------
 
-setwd("~/dimbo/")
+setwd("~/euklen/")
 
 tree <- read.tree("busco_tree_pretrim.newick")
 tree$tip.label <- gsub(".cds.filtered","",tree$tip.label)
@@ -14,8 +14,8 @@ tree$tip.label <- tree$tip.label %>% substr(1,15)
 
 ## LOADING DATA ----------------------------------------------------------------
 
-setwd("~/dimbo/")
-growth_data <- read.csv("euk_Weissman.csv")
+setwd("~/euklen/")
+growth_data <- read.csv("euk_Weissman.csv") %>% subset(Gene.Length>1e6)
 growth_data_deduplicated <- subset(growth_data,!duplicated(Accession))
 growth_data_sub <- subset(growth_data_deduplicated,Gene.Length>1e6)
 growth_data_sub$Accession <- substr(growth_data_sub$Accession,1,15)
@@ -24,13 +24,13 @@ rownames(growth_data_sub) <- growth_data_sub$Accession
 
 ## LOADING TREE MMETSP ---------------------------------------------------------
 
-setwd("~/dimbo/")
+setwd("~/euklen/")
 tree.mmestp <- read.tree("SpeciesTree_rooted.txt")
 tree.mmestp$tip.label <- gsub(".cds.filtered","",tree.mmestp$tip.label)
 
 ## LOADING DATA MMESTP ---------------------------------------------------------
 
-setwd("~/dimbo/")
+setwd("~/euklen/")
 growth_data.mmestp <- read.csv("growth.csv")
 growth_data_deduplicated.mmestp <- subset(growth_data.mmestp,!duplicated(Accession))
 growth_data_sub.mmestp <- subset(growth_data_deduplicated.mmestp,Number.Genes.Filtered>2000)
@@ -39,7 +39,7 @@ rownames(growth_data_sub.mmestp) <- growth_data_sub.mmestp$Accession
 
 ## Genome Length Data ----------------------------------------------------------
 
-setwd("~/dimbo/")
+setwd("~/euklen/")
 nvl_data <- read.csv("euk_genomevsnogene.csv")
 
 ## Plot ------------------------------------------------------------------------
@@ -76,6 +76,7 @@ NvL <- ggplot(nvl_data,
   xlab("Genome Length") +
   ylab("Number of Genes")
 
+setwd("~/euklen/")
 png("Fig1.png",width=700,height=500)
 ggarrange(LvD,
           ggarrange(NvL,NvD,nrow=2,labels=c("(b)","(c)")),
@@ -84,7 +85,7 @@ ggarrange(LvD,
           ncol=2)
 dev.off()
 
-
+setwd("~/euklen/")
 pdf("Fig1.pdf",width=8,height=5)
 ggarrange(LvD,
           ggarrange(NvL,NvD,nrow=2,labels=c("(b)","(c)")),
@@ -98,11 +99,11 @@ dev.off()
 
 ### GenBank
 
-nophylo_model <- lm(log10(Doubling.Time) ~ log10(Gene.Length),
+nophylo_model <- lm(log10(Doubling.Time) ~ log10(Gene.Length) + OGT,
                     data=growth_data_sub)
 summary(nophylo_model)
 
-phylo_model<- phylolm(log10(Doubling.Time) ~ log10(Gene.Length),
+phylo_model<- phylolm(log10(Doubling.Time) ~ log10(Gene.Length) + OGT,
                               data=growth_data_sub,
                               phy =  tree_sub,
                               model="BM")
@@ -110,11 +111,11 @@ summary(phylo_model)
 
 ### MMETSP
 
-nophylo_model.mmestp <- lm(Doubling.Time ~ Number.Genes.Filtered,
+nophylo_model.mmestp <- lm(log10(Doubling.Time) ~ log10(Number.Genes.Filtered) + OGT,
                     data=growth_data_sub.mmestp)
 summary(nophylo_model.mmestp)
 
-phylo_model.mmestp <- phylolm(Doubling.Time ~ Number.Genes.Filtered,
+phylo_model.mmestp <- phylolm(log10(Doubling.Time) ~ log10(Number.Genes.Filtered) + OGT,
                               data=growth_data_sub.mmestp,
                               phy=tree_sub.mmestp,
                               model="BM")
